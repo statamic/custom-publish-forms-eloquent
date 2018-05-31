@@ -1,0 +1,134 @@
+# ------------------------------------------------------------------------------
+# Common PHP Overrides
+#
+# Sometimes editing your php.ini file is impossible or even just annoying.
+# Here are some of the most common settings that can (sometimes) be overridden.
+# ------------------------------------------------------------------------------
+
+# php_value memory_limit 256M
+# php_value post_max_size 16M
+# php_value max_execution_time 90
+# php_value max_input_time 120
+# php_value upload_max_filesize 16M
+
+# ------------------------------------------------------------------------------
+# Base Apache Rules
+#
+# When running in a subdirectory, you should uncomment and adjust the
+# RewriteBase rule to point to your directory, eg. RewriteBase /directory/
+# ------------------------------------------------------------------------------
+
+Options -MultiViews
+RewriteEngine On
+# RewriteBase /
+
+
+# ------------------------------------------------------------------------------
+# Remove Trailing Slashes
+# ------------------------------------------------------------------------------
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+
+# ----------------------------------------------------------------------
+# Force `https://`
+#
+# Redirect from the `http://` to the `https://` version of the URL.
+# https://wiki.apache.org/httpd/RewriteHTTPToHTTPS
+# ----------------------------------------------------------------------
+
+# <IfModule mod_rewrite.c>
+#    RewriteEngine On
+#    RewriteCond %{HTTPS} !=on
+#    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+# </IfModule>
+
+# ----------------------------------------------------------------------
+# Suppressing / Forcing the `www.` at the beginning of URLs
+# ----------------------------------------------------------------------
+
+# The same content should never be available under two different
+# URLs, especially not with and without `www.` at the beginning.
+# This can cause SEO problems (duplicate content), and therefore,
+# you should choose one of the alternatives and redirect the other
+# one.
+#
+# By default `Option 1` (no `www.`) is activated.
+# https://web.archive.org/web/20161122074017/http://no-www.org/faq.php?q=class_b
+#
+# If you would prefer to use `Option 2`, just comment out all the
+# lines from `Option 1` and uncomment the ones from `Option 2`.
+#
+# (!) NEVER USE BOTH RULES AT THE SAME TIME!
+
+# (1) The two rules assume by default that both HTTP and HTTPS
+#     environments are available for redirection.
+#     If your SSL certificate could not handle one of the domains
+#     used during redirection, you should turn the condition on.
+#
+#     https://github.com/h5bp/server-configs-apache/issues/52
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Option 1: rewrite www.example.com → example.com
+
+# <IfModule mod_rewrite.c>
+#    RewriteEngine On
+#    # (1)
+#    # RewriteCond %{HTTPS} !=on
+#    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+#    RewriteRule ^ %{ENV:PROTO}://%1%{REQUEST_URI} [R=301,L]
+# </IfModule>
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Option 2: rewrite example.com → www.example.com
+#
+# Be aware that the following might not be a good idea if you use "real"
+# subdomains for certain parts of your website.
+
+# <IfModule mod_rewrite.c>
+#     RewriteEngine On
+#     # (1)
+#     # RewriteCond %{HTTPS} !=on
+#     RewriteCond %{HTTP_HOST} !^www\. [NC]
+#     RewriteCond %{SERVER_ADDR} !=127.0.0.1
+#     RewriteCond %{SERVER_ADDR} !=::1
+#     RewriteRule ^ %{ENV:PROTO}://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+# </IfModule>
+
+
+# ------------------------------------------------------------------------------
+# Static Caching Proxy
+#
+# Enable these rules when using static html caching
+# to bypass Statamic when a given URL has a cached copy.
+# ------------------------------------------------------------------------------
+
+# RewriteCond %{DOCUMENT_ROOT}/static/%{REQUEST_URI}_%{QUERY_STRING}\.html -s
+# RewriteCond %{REQUEST_METHOD} GET
+# RewriteRule .* static/%{REQUEST_URI}_%{QUERY_STRING}\.html [L,T=text/html]
+
+
+# ------------------------------------------------------------------------------
+# Protect System Directories and Files
+#
+# These are not necessary if you are running above webroot.
+# ------------------------------------------------------------------------------
+
+RewriteRule ^site/(?!themes) - [F,L]
+RewriteRule ^local - [F,L]
+RewriteRule ^statamic - [F,L]
+
+# Block access to hidden files and directories, with the exception of /.well-known
+RedirectMatch 404 /(?!.well-known)(\.)\w+
+
+
+# ------------------------------------------------------------------------------
+# Route requests through index.php
+# ------------------------------------------------------------------------------
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
