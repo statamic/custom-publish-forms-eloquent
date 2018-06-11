@@ -1,0 +1,27 @@
+<section class="regular">
+
+    <header>
+        <h1>Products</h1>
+    </header>
+
+    <article class="list">
+
+        {{ products:all }}
+            {{ if no_results }}
+                No products
+            {{ else }}
+
+                <div class="block">
+                    <a href="{{ url }}">
+                        <h3>{{ title }}</h3>
+                        <p><b>{{ formatted_price }}</b></p>
+                        {{ content | markdown }}
+                    </a>
+                </div>
+
+            {{ /if }}
+        {{ /products:all }}
+
+    </article>
+
+</section>

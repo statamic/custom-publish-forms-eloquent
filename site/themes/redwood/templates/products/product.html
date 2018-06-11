@@ -1,0 +1,16 @@
+<section class="regular">
+
+    {{ products:find }}
+
+        <header>
+            {{ title | wrap:h1 }}
+            {{ formatted_price | wrap:h2 }}
+        </header>
+
+        <article class="content">
+            {{ content | markdown }}
+        </article>
+
+    {{ /products:find }}
+
+</section>

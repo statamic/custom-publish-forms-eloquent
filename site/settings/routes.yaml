@@ -21,3 +21,4 @@ routes:
     layout: feed
     template: feeds/things
     content_type: atom
+  /products/{product}: products/product
