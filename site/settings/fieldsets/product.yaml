@@ -1,0 +1,15 @@
+fields:
+  title:
+    type: text
+    width: 75
+    validate: required
+  slug:
+    type: text
+    width: 25
+    validate: required
+  price:
+    type: integer
+    width: 25
+    validate: required
+  content:
+    type: markdown

@@ -1,0 +1,16 @@
+routes:
+  /:
+    uses: index
+    as: products.index
+  create:
+    uses: create
+    as: products.create
+  "{product}/edit":
+    uses: edit
+    as: products.edit
+  "post@{product}":
+    uses: update
+    as: products.update
+  post@/:
+    uses: store
+    as: products.store
