@@ -26,7 +26,7 @@
                             </a>
                         </td>
                         <td class="cell-slug">
-                            <span>what-i-did-last-summer</span>
+                            <span>{{ $product->slug }}</span>
                         </td>
                         <td class="cell-date">{{ $product->created_at->format('Y/m/d')}}</td>
                     </tr>
