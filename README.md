@@ -10,7 +10,7 @@ DB_PASSWORD=
 ```
 
 You would then create your migrations, like any Laravel install.
-[We have included one in this repo](site/database/migrations/2018_05_31_200716_create_products_table).
+[We have included one in this repo](site/database/migrations/2018_05_31_200716_create_products_table.php).
 
 ```
 php please migrate
