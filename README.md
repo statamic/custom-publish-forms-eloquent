@@ -1,4 +1,5 @@
-# Statamic ❤️ Eloquent
+# Custom Publish Forms + Eloquent
+> An example of using [Custom Publish forms](https://docs.statamic.com/addons/publish-forms#main) powered by Eloquent models in a Statamic addon.
 
 ## Set up the database
 
