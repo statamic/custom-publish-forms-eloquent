@@ -152,7 +152,9 @@ class ProductsController extends Controller
 
         return [
             'success'  => true,
-            'redirect' => route('products.edit', ['product' => $id]),
+            'redirect' => request()->continue
+                ? route('products.edit', ['product' => $id])
+                : route('products.index'),
             'message' => $message
         ];
     }
